@@ -10,8 +10,8 @@ var purchase_quantity: int = 1
 @onready var name_label = $HBoxContainer/VBoxContainer/NameLabel
 @onready var level_label = $HBoxContainer/VBoxContainer/LevelLabel
 @onready var upgrade_button = $HBoxContainer/UpgradeButton
-@onready var quantity_label = $HBoxContainer/UpgradeButton/PanelContainer/HBoxContainer/QuantityLabel
-@onready var cost_label = $HBoxContainer/UpgradeButton/PanelContainer/HBoxContainer/CostLabel
+@onready var quantity_label = $HBoxContainer/UpgradeButton/PanelContainer/Control/QuantityLabel
+@onready var cost_label = $HBoxContainer/UpgradeButton/PanelContainer/Control/CostLabel
 
 func _ready():
 	upgrade_button.pressed.connect(_on_purchase_pressed)

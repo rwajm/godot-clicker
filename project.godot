@@ -18,7 +18,8 @@ config/icon="res://icon.svg"
 [autoload]
 
 GameData="*res://scripts/game_data.gd"
-EventBus="*res://scripts/event_bus.gd"
+EventBus="*res://scripts/managers/event_bus.gd"
+MineManager="*res://scripts/managers/mine_manager.gd"
 
 [display]
 

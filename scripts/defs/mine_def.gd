@@ -35,11 +35,20 @@ static var click_upgrades = {
 
 # 발전기 목록
 static var generators = {
+	"test": {
+		"name": "test",
+		"description": "test generator",
+		"base_cost": 1.0,
+		"cost_multiplier": 1.15,
+		"yield": 10000000.0,
+		"yield_multiplier": 1.0,
+		"interval": 0.07
+	},
 	"g1": {
 		"name": "g1",
 		"description": "generator 1",
 		"base_cost": 15.0,
-		"cost_multiplier": 1.07,
+		"cost_multiplier": 1.05,
 		"yield": 1.0,
 		"yield_multiplier": 1.0,
 		"interval": 1.0
@@ -48,7 +57,7 @@ static var generators = {
 		"name": "g2",
 		"description": "generator 2",
 		"base_cost": 100.0,
-		"cost_multiplier": 1.15,
+		"cost_multiplier": 1.10,
 		"yield": 4.0,
 		"yield_multiplier": 1.0,
 		"interval": 0.5
@@ -57,7 +66,7 @@ static var generators = {
 		"name": "g3",
 		"description": "generator 3",
 		"base_cost": 1100.0,
-		"cost_multiplier": 1.14,
+		"cost_multiplier": 1.15,
 		"yield": 8.0,
 		"yield_multiplier": 1.0,
 		"interval": 0.25

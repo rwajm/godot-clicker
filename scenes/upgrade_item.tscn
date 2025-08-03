@@ -61,18 +61,31 @@ grow_vertical = 2
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxEmpty_n2pwb")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/UpgradeButton/PanelContainer"]
+[node name="Control" type="Control" parent="HBoxContainer/UpgradeButton/PanelContainer"]
 layout_mode = 2
+mouse_filter = 1
 
-[node name="QuantityLabel" type="Label" parent="HBoxContainer/UpgradeButton/PanelContainer/HBoxContainer"]
-layout_mode = 2
+[node name="QuantityLabel" type="Label" parent="HBoxContainer/UpgradeButton/PanelContainer/Control"]
+layout_mode = 1
+offset_right = 27.0
+offset_bottom = 34.0
 size_flags_vertical = 0
 text = "×1"
 label_settings = ExtResource("4_0e4al")
 
-[node name="CostLabel" type="Label" parent="HBoxContainer/UpgradeButton/PanelContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 10
+[node name="CostLabel" type="Label" parent="HBoxContainer/UpgradeButton/PanelContainer/Control"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -39.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_horizontal = 8
 size_flags_vertical = 8
 text = "0"
 label_settings = ExtResource("3_isks0")
+horizontal_alignment = 2

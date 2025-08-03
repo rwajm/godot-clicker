@@ -12,7 +12,6 @@ var current_quantity_index = 0
 func _ready():
 	EventBus.money_changed.connect(_on_money_changed)
 	EventBus.mine_clicked.connect(_on_mine_clicked)
-	EventBus.mine_income_changed.connect(_on_income_changed)
 	quantity_selector.pressed.connect(_on_quantity_selector_pressed)
 	
 	_setup_upgrade_items()
@@ -95,14 +94,12 @@ func _update_income_display():
 			income_label.visible = false
 
 func _format_number(number: float) -> String:
-	if number < 1000:
+	if number < 1000000:
 		return str(int(number))
-	elif number < 1000000:
-		return "%.1fK" % (number / 1000.0)
 	elif number < 1000000000:
-		return "%.1fM" % (number / 1000000.0)
+		return "%.2fM" % (number / 1000000.0)
 	else:
-		return "%.1fB" % (number / 1000000000.0)
+		return "%.2fB" % (number / 1000000000.0)
 
 # 클릭 효과(클릭당 수입 표시) 
 func _show_click_feedback(amount: float):

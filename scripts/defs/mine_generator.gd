@@ -23,7 +23,9 @@ func _init(id: String):
 	
 	if interval > 0.0:
 		is_auto_generator = true
-		_setup_timer()
+		# 0.1초 초과 간격만 개별 타이머 사용
+		if interval > 0.1:
+			_setup_timer()
 
 func _load_item_data():
 	if MineDefs.click_upgrades.has(item_id):
@@ -99,14 +101,14 @@ func _update_cost():
 		current_cost = base_cost * pow(cost_multiplier, level)
 
 func _start_generator_if_needed():
-	if is_auto_generator and timer and count > 0:
-		if timer.is_stopped():
+	if is_auto_generator and count > 0:
+		if timer and timer.is_stopped():
 			timer.start()
 
 func _on_timer_tick():
 	if count > 0:
 		var generated_amount = base_yield * count * current_yield_multiplier
-		EventBus.mine_resource_generated.emit(item_id, generated_amount)
+		EventBus.mine_resource_generated.emit(generated_amount)
 
 func trigger_click() -> float:
 	if not is_auto_generator and level > 0:
@@ -122,12 +124,27 @@ func start_generator():
 	if timer and is_auto_generator and count > 0:
 		timer.start()
 
+
+func get_generator_info() -> Dictionary:
+	return {
+		"id": item_id,
+		"name": get_name(),
+		"description": get_description(),
+		"level_or_count": get_level(),
+		"cost": get_cost(),
+		"current_yield": get_current_yield(),
+		"yield_per_second": get_yield_per_second(),
+		"interval": interval,
+		"is_auto": is_auto_generator,
+		"uses_shared_timer": is_auto_generator and interval <= 1.0
+	}
+
 func get_save_data() -> Dictionary:
 	return {
 		"item_id": item_id,
 		"level": level,
 		"count": count,
-		"current_yield_multiplier": current_yield_multiplier
+		"current_yield_multiplier": current_yield_multiplier,
 	}
 
 func load_save_data(data: Dictionary):

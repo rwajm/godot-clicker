@@ -2,5 +2,5 @@
 
 [resource]
 line_spacing = 0.0
-font_size = 24
+font_size = 28
 font_color = Color(0.733333, 0.733333, 0.733333, 1)

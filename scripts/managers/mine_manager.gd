@@ -53,9 +53,9 @@ func _process_fast_generators():
 	var total_fast_income = 0.0
 	
 	for generator in fast_generators:
-		if generator.count > 0:
+		if generator.level > 0:
 			# 초당 생산량 = (기본 생산량 * 개수 * 배수) / 간격
-			var income_per_second = (generator.base_yield * generator.count * generator.current_yield_multiplier) / generator.interval
+			var income_per_second = (generator.base_yield * generator.level * generator.current_yield_multiplier) / generator.interval
 			total_fast_income += income_per_second
 	
 	if total_fast_income > 0:
@@ -73,7 +73,7 @@ func purchase_item(item_id: String) -> bool:
 		item.purchase()
 		
 		if item.is_auto_generator:
-			EventBus.mine_generator_purchased.emit(item_id, item.count)
+			EventBus.mine_generator_purchased.emit(item_id, item.level)
 		else:
 			EventBus.mine_upgrade_purchased.emit(item_id, item.level)
 		
@@ -171,7 +171,7 @@ func debug_print_all_items():
 	print("=== Mine Items Status ===")
 	for item_id in mine_items.keys():
 		var item = mine_items[item_id]
-		print("%s: Level/Count=%d, Cost=%.2f, Yield/sec=%.2f" % [
+		print("%s: Level=%d, Cost=%.2f, Yield/sec=%.2f" % [
 			item_id, 
 			item.get_level(), 
 			item.get_cost(), 
@@ -186,7 +186,6 @@ func debug_reset_all():
 	for item_id in mine_items.keys():
 		var item = mine_items[item_id]
 		item.level = 0
-		item.count = 0
 		item._update_cost()
 		if item.timer and not item.timer.is_stopped():
 			item.timer.stop()

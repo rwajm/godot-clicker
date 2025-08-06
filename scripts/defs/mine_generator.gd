@@ -6,7 +6,6 @@ var item_id: String
 var item_data: Dictionary
 
 var level: int = 0
-var count: int = 0
 var current_cost: float = 0.0
 
 var base_yield: float = 0.0
@@ -61,16 +60,13 @@ func get_cost() -> float:
 	return current_cost
 
 func get_level() -> int:
-	if is_auto_generator:
-		return count
-	else:
-		return level
+	return level
+
+func get_x1_yield() -> float:
+	return base_yield * current_yield_multiplier
 
 func get_current_yield() -> float:
-	if is_auto_generator:
-		return base_yield * count * current_yield_multiplier
-	else:
-		return base_yield * level * current_yield_multiplier
+	return base_yield * level * current_yield_multiplier
 
 func get_yield_per_second() -> float:
 	if is_auto_generator and interval > 0.0:
@@ -82,12 +78,9 @@ func can_purchase(available_money: float) -> bool:
 	return available_money >= current_cost
 
 func purchase() -> bool:
+	level += 1
 	if is_auto_generator:
-		count += 1
 		_start_generator_if_needed()
-	else:
-		level += 1
-	
 	_update_cost()
 	return true
 
@@ -95,19 +88,16 @@ func _update_cost():
 	var cost_multiplier = item_data.get("cost_multiplier", 1.15)
 	var base_cost = item_data.get("base_cost", 0.0)
 	
-	if is_auto_generator:
-		current_cost = base_cost * pow(cost_multiplier, count)
-	else:
-		current_cost = base_cost * pow(cost_multiplier, level)
+	current_cost = base_cost * pow(cost_multiplier, level)
 
 func _start_generator_if_needed():
-	if is_auto_generator and count > 0:
+	if is_auto_generator and level > 0:
 		if timer and timer.is_stopped():
 			timer.start()
 
 func _on_timer_tick():
-	if count > 0:
-		var generated_amount = base_yield * count * current_yield_multiplier
+	if level > 0:
+		var generated_amount = base_yield * level * current_yield_multiplier
 		EventBus.mine_resource_generated.emit(generated_amount)
 
 func trigger_click() -> float:
@@ -121,7 +111,7 @@ func stop_generator():
 		timer.stop()
 
 func start_generator():
-	if timer and is_auto_generator and count > 0:
+	if timer and is_auto_generator and level > 0:
 		timer.start()
 
 
@@ -130,7 +120,7 @@ func get_generator_info() -> Dictionary:
 		"id": item_id,
 		"name": get_name(),
 		"description": get_description(),
-		"level_or_count": get_level(),
+		"level": get_level(),
 		"cost": get_cost(),
 		"current_yield": get_current_yield(),
 		"yield_per_second": get_yield_per_second(),
@@ -143,16 +133,14 @@ func get_save_data() -> Dictionary:
 	return {
 		"item_id": item_id,
 		"level": level,
-		"count": count,
 		"current_yield_multiplier": current_yield_multiplier,
 	}
 
 func load_save_data(data: Dictionary):
 	level = data.get("level", 0)
-	count = data.get("count", 0)
 	current_yield_multiplier = data.get("current_yield_multiplier", 1.0)
 	
 	_update_cost()
 	
-	if is_auto_generator and count > 0:
+	if is_auto_generator and level > 0:
 		_start_generator_if_needed()

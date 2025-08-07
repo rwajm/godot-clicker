@@ -1,4 +1,3 @@
-# eventbus
 extends Node
 
 # 공통 

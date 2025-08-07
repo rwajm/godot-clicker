@@ -1,4 +1,3 @@
-# scenes/upgrade_item.gd
 class_name UpgradeItem
 extends PanelContainer
 

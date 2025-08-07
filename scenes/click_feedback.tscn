@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://biek57cptst5k"]
+
+[ext_resource type="Script" uid="uid://cbui45hmv1o88" path="res://scripts/click_feedback.gd" id="1_w0bic"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_cbg6g"]
+font_size = 32
+font_color = Color(0.866667, 0.866667, 0.866667, 1)
+
+[node name="ClickFeedback" type="MarginContainer"]
+offset_right = 45.0
+offset_bottom = 45.0
+mouse_filter = 2
+script = ExtResource("1_w0bic")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "+ 0"
+label_settings = SubResource("LabelSettings_cbg6g")
+vertical_alignment = 1

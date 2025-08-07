@@ -1,4 +1,3 @@
-# scripts/managers/mine_manager.gd (AutoLoad)
 extends Node
 
 var mine_items: Dictionary = {}
@@ -21,7 +20,7 @@ func _initialize_mine_items():
 	for upgrade_id in MineDefs.click_upgrades.keys():
 		var generator = MineGenerator.new(upgrade_id)
 		mine_items[upgrade_id] = generator
-		if generator.timer: # 추후 클릭 효과 구현시 필요 
+		if generator.timer:
 			add_child(generator.timer)
 	
 	for generator_id in MineDefs.generators.keys():

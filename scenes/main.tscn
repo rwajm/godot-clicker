@@ -13,38 +13,35 @@ content_margin_top = 0.0
 content_margin_right = 8.0
 content_margin_bottom = 0.0
 
-[node name="Main" type="Node2D"]
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_tbgi4")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-
-[node name="GameBackground" type="ColorRect" parent="CanvasLayer"]
+[node name="GameBackground" type="ColorRect" parent="."]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 color = Color(0.392157, 0.352941, 0.627451, 1)
 
-[node name="SplitContainer" type="SplitContainer" parent="CanvasLayer"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-collapsed = true
-dragging_enabled = false
-dragger_visibility = 2
-
-[node name="ClickerControl" type="Control" parent="CanvasLayer/SplitContainer"]
+[node name="ClickerControl" type="Control" parent="."]
 custom_minimum_size = Vector2(600, 0)
 layout_mode = 2
+anchors_preset = 0
+offset_right = 1920.0
+offset_bottom = 1200.0
 size_flags_horizontal = 3
 mouse_filter = 2
 
-[node name="ScoreLabel" type="Label" parent="CanvasLayer/SplitContainer/ClickerControl"]
+[node name="ScoreLabel" type="Label" parent="ClickerControl"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -56,17 +53,25 @@ grow_horizontal = 2
 text = "0"
 label_settings = ExtResource("2_sugp2")
 
-[node name="ClickerButton" parent="CanvasLayer/SplitContainer/ClickerControl" instance=ExtResource("1_o5qli")]
+[node name="ClickerButton" parent="ClickerControl" instance=ExtResource("1_o5qli")]
 layout_mode = 1
 mouse_default_cursor_shape = 2
 action_mode = 0
 
-[node name="UpgradePanel" type="Panel" parent="CanvasLayer/SplitContainer"]
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="UpgradePanel" type="Panel" parent="CanvasLayer"]
 custom_minimum_size = Vector2(600, 0)
-layout_mode = 2
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_vertical = 2
 theme_override_styles/panel = ExtResource("4_tefeu")
 
-[node name="UpgradeVbox" type="VBoxContainer" parent="CanvasLayer/SplitContainer/UpgradePanel"]
+[node name="UpgradeVbox" type="VBoxContainer" parent="CanvasLayer/UpgradePanel"]
 layout_mode = 2
 offset_right = 600.0
 offset_bottom = 1200.0
@@ -74,7 +79,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 8
 
-[node name="UpgradeTitle" type="Label" parent="CanvasLayer/SplitContainer/UpgradePanel/UpgradeVbox"]
+[node name="UpgradeTitle" type="Label" parent="CanvasLayer/UpgradePanel/UpgradeVbox"]
 custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
 size_flags_vertical = 1
@@ -83,16 +88,16 @@ text = "Upgrades"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="UpgradePanelContainer" type="PanelContainer" parent="CanvasLayer/SplitContainer/UpgradePanel/UpgradeVbox"]
+[node name="UpgradePanelContainer" type="PanelContainer" parent="CanvasLayer/UpgradePanel/UpgradeVbox"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxEmpty_tefeu")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/SplitContainer/UpgradePanel/UpgradeVbox/UpgradePanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/UpgradePanel/UpgradeVbox/UpgradePanelContainer"]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="QuantitySelectorButton" type="Button" parent="CanvasLayer/SplitContainer/UpgradePanel/UpgradeVbox/UpgradePanelContainer/VBoxContainer"]
+[node name="QuantitySelectorButton" type="Button" parent="CanvasLayer/UpgradePanel/UpgradeVbox/UpgradePanelContainer/VBoxContainer"]
 custom_minimum_size = Vector2(160, 48)
 layout_mode = 2
 size_flags_horizontal = 8
@@ -100,19 +105,19 @@ theme_override_font_sizes/font_size = 28
 theme_override_styles/normal = ExtResource("4_tbgi4")
 text = "×1"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/SplitContainer/UpgradePanel/UpgradeVbox/UpgradePanelContainer/VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/UpgradePanel/UpgradeVbox/UpgradePanelContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/SplitContainer/UpgradePanel/UpgradeVbox/UpgradePanelContainer/VBoxContainer/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/UpgradePanel/UpgradeVbox/UpgradePanelContainer/VBoxContainer/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
 
-[node name="AutoClickItem" parent="CanvasLayer/SplitContainer/UpgradePanel/UpgradeVbox/UpgradePanelContainer/VBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource("2_0wfyh")]
+[node name="AutoClickItem" parent="CanvasLayer/UpgradePanel/UpgradeVbox/UpgradePanelContainer/VBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource("2_0wfyh")]
 layout_mode = 2
 script = null
 
-[node name="ClickPowerItem" parent="CanvasLayer/SplitContainer/UpgradePanel/UpgradeVbox/UpgradePanelContainer/VBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource("2_0wfyh")]
+[node name="ClickPowerItem" parent="CanvasLayer/UpgradePanel/UpgradeVbox/UpgradePanelContainer/VBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource("2_0wfyh")]
 layout_mode = 2
 script = null

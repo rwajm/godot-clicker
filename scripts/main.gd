@@ -1,9 +1,11 @@
-extends Node2D
+extends Control
 
-@onready var score_label = $CanvasLayer/SplitContainer/ClickerControl/ScoreLabel
-@onready var income_label = $CanvasLayer/SplitContainer/ClickerControl/IncomeLabel  # 異붽�
-@onready var quantity_selector = $CanvasLayer/SplitContainer/UpgradePanel/UpgradeVbox/UpgradePanelContainer/VBoxContainer/QuantitySelectorButton
-@onready var upgrade_container = $CanvasLayer/SplitContainer/UpgradePanel/UpgradeVbox/UpgradePanelContainer/VBoxContainer/ScrollContainer/VBoxContainer
+@onready var score_label = $ClickerControl/ScoreLabel
+@onready var income_label = $ClickerControl/ScoreLabel #추가예정 
+@onready var quantity_selector = $CanvasLayer/UpgradePanel/UpgradeVbox/UpgradePanelContainer/VBoxContainer/QuantitySelectorButton
+@onready var upgrade_container = $CanvasLayer/UpgradePanel/UpgradeVbox/UpgradePanelContainer/VBoxContainer/ScrollContainer/VBoxContainer
+
+var click_feedback_scene = preload("res://scenes/click_feedback.tscn")
 
 var purchase_quantity = 1
 var purchase_quantities = [1, 10, 100]
@@ -22,7 +24,6 @@ func _setup_upgrade_items():
 		child.queue_free()
 	await get_tree().process_frame
 	
-	# 아이템 아이콘... 추후 실제 ui에 사용
 	var upgrade_item_scene = preload("res://scenes/upgrade_item.tscn")
 	
 	# 클릭 
@@ -70,7 +71,6 @@ func _add_category_header(title: String):
 	upgrade_container.add_child(header)
 
 func _on_mine_clicked(amount: float):
-	# 클릭 효과 
 	_show_click_feedback(amount)
 	
 func _on_money_changed(new_amount: float):
@@ -78,7 +78,7 @@ func _on_money_changed(new_amount: float):
 
 func _update_score_display():
 	if score_label:
-		score_label.text = _format_number(GameData.money)
+		score_label.text = Utils.format_number(GameData.money)
 
 # 초당 수입(클릭 반영)
 func _on_income_changed(new_income: float):
@@ -88,23 +88,18 @@ func _update_income_display():
 	if income_label:
 		var income_per_sec = MineManager.get_income()
 		if income_per_sec > 0:
-			income_label.text = "%s/sec" % _format_number(income_per_sec)
+			income_label.text = "%s/sec" % Utils.format_number(income_per_sec)
 			income_label.visible = true
 		else:
 			income_label.visible = false
 
-func _format_number(number: float) -> String:
-	if number < 1000000:
-		return str(int(number))
-	elif number < 1000000000:
-		return "%.2fM" % (number / 1000000.0)
-	else:
-		return "%.2fB" % (number / 1000000000.0)
-
 # 클릭 효과(클릭당 수입 표시) 
 func _show_click_feedback(amount: float):
-	#
-	pass
+	var mouse_position = get_global_mouse_position()
+	
+	var feedback_effect = click_feedback_scene.instantiate()
+	add_child(feedback_effect)
+	feedback_effect.show_click_feedback(amount, mouse_position)
 
 func _on_quantity_selector_pressed():
 	current_quantity_index = (current_quantity_index + 1) % purchase_quantities.size()

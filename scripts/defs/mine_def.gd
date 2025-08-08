@@ -1,4 +1,3 @@
-# mine 업그레이드 정의
 class_name MineDefs
 extends RefCounted
 

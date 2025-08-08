@@ -1,4 +1,3 @@
-# game data
 extends Node
 
 # goods status

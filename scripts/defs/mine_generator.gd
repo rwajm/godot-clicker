@@ -1,4 +1,3 @@
-# 광산(클리커) 발전기 클래스 
 class_name MineGenerator
 extends RefCounted
 

@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://df1oimf886234"]
 
 [ext_resource type="StyleBox" uid="uid://djrdrxwvc6fj6" path="res://assets/style_box_flat_item.tres" id="1_mdhk6"]
-[ext_resource type="Script" uid="uid://d1s6jmmpfr746" path="res://scripts/upgrade_item.gd" id="2_n2pwb"]
+[ext_resource type="Script" uid="uid://d1s6jmmpfr746" path="res://scripts/ui/upgrade_item.gd" id="2_n2pwb"]
 [ext_resource type="LabelSettings" uid="uid://b64bdumv2qjo3" path="res://assets/label_settings_title.tres" id="3_isks0"]
 [ext_resource type="LabelSettings" uid="uid://cmcjc36abu7hj" path="res://assets/label_settings_description.tres" id="4_0e4al"]
 [ext_resource type="StyleBox" uid="uid://dd2260bp2eese" path="res://assets/style_box_flat_button.tres" id="5_n2pwb"]

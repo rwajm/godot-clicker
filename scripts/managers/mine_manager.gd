@@ -61,24 +61,22 @@ func _process_fast_generators():
 		var final_amount = total_fast_income * 0.1
 		EventBus.mine_resource_generated.emit(final_amount)
 
-func purchase_item(item_id: String) -> bool:
+func purchase_item(item_id: String, quantity: int = 1) -> bool:
 	if not mine_items.has(item_id):
 		return false
 	
 	var item = mine_items[item_id]
-	var cost = item.get_cost()
+	var cost = item.calculate_total_cost(quantity)
 	
-	if GameData.spend_money(cost):
-		item.purchase()
-		
-		if item.is_auto_generator:
-			EventBus.mine_generator_purchased.emit(item_id, item.level)
-		else:
-			EventBus.mine_upgrade_purchased.emit(item_id, item.level)
-		
-		return true
+	if not GameData.spend_money(cost):
+		return false
 	
-	return false
+	item.apply_purchase(quantity)
+	if item.is_auto_generator:
+		EventBus.mine_generator_purchased.emit(item_id, item.level)
+	else:
+		EventBus.mine_upgrade_purchased.emit(item_id, item.level)
+	return true
 
 func get_item_cost(item_id: String) -> float:
 	if mine_items.has(item_id):

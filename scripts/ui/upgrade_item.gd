@@ -41,58 +41,25 @@ func _update_display():
 	
 	# 발전기 정보
 	name_label.text = item.get_name()
+	level_label.text = "Lv. %d" % item.get_level() if item.get_level() > 0 else ""
 	
-	var level = item.get_level()
-	var current_yield = item.get_current_yield()
-	
-	if level:
-		level_label.text = "Lv. %d" % level
+	if item.get_level() > 0:
+		var current_yield = item.get_yield_per_second() if item.is_auto_generator else item.get_current_yield()
+		var suffix = "/sec" if item.is_auto_generator else "/click"
+		generate_label.text = "+ %s %s" % [Utils.format_number(current_yield), suffix]
 	else:
-		level_label.text = ""
+		generate_label.text = ""
 	
-	if current_yield:
-		if item.is_auto_generator:
-			generate_label.text = "+ %d /sec" % current_yield
-		else:
-			generate_label.text = "+ %d /click" % current_yield
-	else:
-			generate_label.text = ""
+	var cost = item.calculate_total_cost(purchase_quantity)
 	
-	# 발전기 구매 정보
-	var single_cost = item.get_cost()
-	var total_cost = _calculate_total_cost(single_cost, purchase_quantity, item.item_data.cost_multiplier)
-	var yield_increase = item.get_x1_yield() * purchase_quantity
-	
-	cost_label.text = _format_number(total_cost)
+	cost_label.text = Utils.format_number(cost)
 	quantity_label.text = "×%d" % purchase_quantity
 	
-	if item.is_auto_generator:
-		generate_increase_label.text = "+ %d /sec" % yield_increase
-	else:
-		generate_increase_label.text = "+ %d /click" % yield_increase
-	
-	# 발전기 구매 가능 여부
-	upgrade_button.disabled = !GameData.can_afford(total_cost)
+	var yield_increase = item.get_x1_yield() * purchase_quantity
+	var suffix = "" if item.is_auto_generator else " /click"
+	generate_increase_label.text = "+ %s%s" % [Utils.format_number(yield_increase), suffix]
 
-func _calculate_total_cost(base_cost: float, quantity: int, multiplier: float) -> float:
-	var total = 0.0
-	var current_cost = base_cost
-	
-	for i in range(quantity):
-		total += current_cost
-		current_cost *= multiplier
-	
-	return total
-
-func _format_number(number: float) -> String:
-	if number < 1000:
-		return str(int(number))
-	elif number < 1000000:
-		return "%.1fK" % (number / 1000.0)
-	elif number < 1000000000:
-		return "%.1fM" % (number / 1000000.0)
-	else:
-		return "%.1fB" % (number / 1000000000.0)
+	upgrade_button.disabled = !GameData.can_afford(cost)
 
 func _on_purchase_pressed():
 	if item_id.is_empty():
@@ -102,19 +69,10 @@ func _on_purchase_pressed():
 	if not item:
 		return
 	
-	var single_cost = item.get_cost()
-	var total_cost = _calculate_total_cost(single_cost, purchase_quantity, item.item_data.cost_multiplier)
+	var total_cost = item.calculate_total_cost(purchase_quantity)
 	
 	if GameData.can_afford(total_cost):
-		# �곗냽�쇰줈 援щℓ
-		var successful_purchases = 0
-		for i in range(purchase_quantity):
-			if MineManager.purchase_item(item_id):
-				successful_purchases += 1
-			else:
-				break
-		
-		if successful_purchases > 0:
+		if MineManager.purchase_item(item_id, purchase_quantity):
 			_show_purchase_effect()
 			_update_display()
 

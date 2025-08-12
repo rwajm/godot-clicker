@@ -14,6 +14,7 @@ func set_gems(value: int):
 
 func add_money(amount: float):
 	self.money += amount
+	EventBus.money_changed.emit(money)
 
 func can_afford(cost: float) -> bool:
 	return money >= cost
@@ -21,5 +22,6 @@ func can_afford(cost: float) -> bool:
 func spend_money(cost: float) -> bool:
 	if can_afford(cost):
 		self.money -= cost
+		EventBus.money_changed.emit(money)
 		return true
 	return false

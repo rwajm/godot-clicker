@@ -1,0 +1,64 @@
+[gd_scene load_steps=4 format=3 uid="uid://ggpc7opdy8l6"]
+
+[ext_resource type="StyleBox" uid="uid://cb6vdwcly8a7y" path="res://assets/style_box_flat_panel.tres" id="1_y5hwg"]
+[ext_resource type="StyleBox" uid="uid://dd2260bp2eese" path="res://assets/style_box_flat_button.tres" id="2_ciqnh"]
+[ext_resource type="PackedScene" uid="uid://df1oimf886234" path="res://scenes/upgrade_item.tscn" id="3_xr2uc"]
+
+[node name="UpgradePanel" type="PanelContainer"]
+custom_minimum_size = Vector2(600, 0)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -600.0
+offset_right = 300.0
+offset_bottom = 600.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+theme_override_styles/panel = ExtResource("1_y5hwg")
+
+[node name="UpgradeVbox" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="UpgradeTitle" type="Label" parent="UpgradeVbox"]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 40
+text = "Upgrades"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="UpgradeVbox"]
+layout_mode = 2
+theme_override_constants/margin_right = 24
+
+[node name="QuantitySelectorButton" type="Button" parent="UpgradeVbox/MarginContainer"]
+custom_minimum_size = Vector2(160, 48)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = ExtResource("2_ciqnh")
+text = "×1"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="UpgradeVbox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = ExtResource("1_y5hwg")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UpgradeVbox/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="AutoClickItem" parent="UpgradeVbox/ScrollContainer/VBoxContainer" instance=ExtResource("3_xr2uc")]
+layout_mode = 2
+script = null
+
+[node name="ClickPowerItem" parent="UpgradeVbox/ScrollContainer/VBoxContainer" instance=ExtResource("3_xr2uc")]
+layout_mode = 2
+script = null

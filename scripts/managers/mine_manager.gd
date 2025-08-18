@@ -2,6 +2,9 @@ extends Node
 
 var mine_items: Dictionary = {}
 
+var generators: Dictionary = {}
+var click: MineClick = null
+
 var base_click_power: float = 1.0
 var click_multiplier: float = 1.0
 
@@ -17,22 +20,24 @@ func _ready():
 	_setup_shared_timer()
 
 func _initialize_mine_items():
-	for upgrade_id in MineDefs.click_upgrades.keys():
-		var generator = MineGenerator.new(upgrade_id)
-		mine_items[upgrade_id] = generator
-		if generator.timer:
-			add_child(generator.timer)
-	
-	for generator_id in MineDefs.generators.keys():
-		var generator = MineGenerator.new(generator_id)
-		mine_items[generator_id] = generator
+	for item_id in MineDefs.generators.keys():
+		var item_data = MineDefs.generators[item_id]
+		var interval = item_data.get("interval", 0.0)
 		
-		if generator.is_auto_generator:
+		if interval > 0.0:
+			var generator = MineGenerator.new(item_id)
+			mine_items[item_id] = generator
+			generators[item_id] = generator
+			
 			if generator.interval <= 0.1:
 				fast_generators.append(generator)
 			else:
 				if generator.timer:
 					add_child(generator.timer)
+		else:
+			var click_item = MineClick.new("click")
+			mine_items["click"] = click_item
+			click = click_item
 
 func _connect_signals():
 	EventBus.mine_resource_generated.connect(_on_resource_generated)
@@ -72,7 +77,7 @@ func purchase_item(item_id: String, quantity: int = 1) -> bool:
 		return false
 	
 	item.apply_purchase(quantity)
-	if item.is_auto_generator:
+	if generators.has(item_id):
 		EventBus.mine_generator_purchased.emit(item_id, item.level)
 	else:
 		EventBus.mine_upgrade_purchased.emit(item_id, item.level)
@@ -88,60 +93,41 @@ func get_item_level(item_id: String) -> int:
 		return mine_items[item_id].get_level()
 	return 0
 
-func get_item_yield_per_second(item_id: String) -> float:
-	if mine_items.has(item_id):
-		return mine_items[item_id].get_yield_per_second()
+func get_item_yield_per_second(generator_id: String) -> float:
+	if generators.has(generator_id):
+		return generators[generator_id].get_yield_per_second()
 	return 0.0
 
 func get_income() -> float:
 	var total = 0.0
-	for generator_id in MineDefs.generators.keys():
-		if mine_items.has(generator_id):
-			total += mine_items[generator_id].get_yield_per_second()
+	for generator in generators.values():
+		total += generator.get_yield_per_second()
 	return total
 	
 func process_mine_click() -> float:
 	var total_generated = base_click_power
-	for upgrade_id in MineDefs.click_upgrades.keys():
-		if mine_items.has(upgrade_id):
-			var click_yield = mine_items[upgrade_id].trigger_click()
-			total_generated += click_yield
-	
+	if click:
+		total_generated += click.trigger_click()
 	var final_amount = total_generated * click_multiplier
 
 	EventBus.mine_clicked.emit(final_amount)
 	EventBus.mine_resource_generated.emit(final_amount)
-	
 	return final_amount
 
-func get_item(item_id: String) -> MineGenerator:
+func get_item(item_id: String) -> MineItem:
 	return mine_items.get(item_id, null)
-
-func get_all_click_upgrades() -> Array:
-	var upgrades = []
-	for upgrade_id in MineDefs.click_upgrades.keys():
-		if mine_items.has(upgrade_id):
-			upgrades.append(mine_items[upgrade_id])
-	return upgrades
-
-func get_all_generators() -> Array:
-	var generators = []
-	for generator_id in MineDefs.generators.keys():
-		if mine_items.has(generator_id):
-			generators.append(mine_items[generator_id])
-	return generators
 
 func stop_all_generators():
 	for generator_id in MineDefs.generators.keys():
-		if mine_items.has(generator_id):
-			mine_items[generator_id].stop_generator()
+		if generators.has(generator_id):
+			generators[generator_id].stop_generator()
 	if shared_timer:
 		shared_timer.stop()
 
 func start_all_generators():
 	for generator_id in MineDefs.generators.keys():
-		if mine_items.has(generator_id):
-			mine_items[generator_id].start_generator()
+		if generators.has(generator_id):
+			generators[generator_id].start_generator()
 	if shared_timer:
 		shared_timer.start()
 
@@ -168,12 +154,20 @@ func debug_print_all_items():
 	print("=== Mine Items Status ===")
 	for item_id in mine_items.keys():
 		var item = mine_items[item_id]
-		print("%s: Level=%d, Cost=%.2f, Yield/sec=%.2f" % [
-			item_id, 
-			item.get_level(), 
-			item.get_cost(), 
-			item.get_yield_per_second()
-		])
+		if item is MineClick:
+			print("%s: Level=%d, Cost=%.2f, Yield=%.2f" % [
+				item_id, 
+				item.get_level(), 
+				item.get_cost(), 
+				item.get_current_yield()
+			])
+		else:
+			print("%s: Level=%d, Cost=%.2f, Yield/sec=%.2f" % [
+				item_id, 
+				item.get_level(), 
+				item.get_cost(), 
+				item.get_yield_per_second()
+			])
 
 func debug_add_money(amount: float):
 	GameData.add_money(amount)

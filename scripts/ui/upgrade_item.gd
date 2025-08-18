@@ -44,8 +44,8 @@ func _update_display():
 	level_label.text = "Lv. %d" % item.get_level() if item.get_level() > 0 else ""
 	
 	if item.get_level() > 0:
-		var current_yield = item.get_yield_per_second() if item.is_auto_generator else item.get_current_yield()
-		var suffix = "/sec" if item.is_auto_generator else "/click"
+		var current_yield = item.get_current_yield() if item is MineClick else item.get_yield_per_second()
+		var suffix = " /Click" if item is MineClick else " /sec"
 		generate_label.text = "+ %s %s" % [Utils.format_number(current_yield), suffix]
 	else:
 		generate_label.text = ""
@@ -56,7 +56,7 @@ func _update_display():
 	quantity_label.text = "×%d" % purchase_quantity
 	
 	var yield_increase = item.get_x1_yield() * purchase_quantity
-	var suffix = "" if item.is_auto_generator else " /click"
+	var suffix = " /Click" if item is MineClick else ""
 	generate_increase_label.text = "+ %s%s" % [Utils.format_number(yield_increase), suffix]
 
 	upgrade_button.disabled = !GameData.can_afford(cost)

@@ -52,7 +52,7 @@ func _update_display():
 	
 	var cost = item.calculate_total_cost(purchase_quantity)
 	
-	cost_label.text = Utils.format_number(cost)
+	cost_label.text = Utils.format_number(ceil(cost))
 	quantity_label.text = "×%d" % purchase_quantity
 	
 	var yield_increase = item.get_x1_yield() * purchase_quantity

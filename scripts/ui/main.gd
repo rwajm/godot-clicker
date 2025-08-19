@@ -19,7 +19,7 @@ func _on_money_changed(new_amount: float):
 
 func _update_score_display():
 	if score_label:
-		score_label.text = Utils.format_number(GameData.money)
+		score_label.text = Utils.format_number(floor(GameData.money))
 
 func _on_income_changed(new_income: float):
 	_update_income_display()

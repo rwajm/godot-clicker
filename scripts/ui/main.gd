@@ -1,16 +1,24 @@
 extends Control
 
 @onready var score_label = $ClickerControl/ScoreLabel
-@onready var income_label = $ClickerControl/ScoreLabel #추가예정
+@onready var income_label = $ClickerControl/IncomeLabel
 
+var update_timer : Timer
 var click_feedback_scene = preload("res://scenes/click_feedback.tscn")
 
 func _ready():
+	update_timer = Timer.new()
+	update_timer.wait_time = 1.0
+	update_timer.timeout.connect(_update_income_display)
+	update_timer.autostart = true
+	add_child(update_timer)
+	
 	EventBus.money_changed.connect(_on_money_changed)
 	EventBus.mine_clicked.connect(_on_mine_clicked)
 	
 	_update_score_display()
 
+	
 func _on_mine_clicked(amount: float):
 	_show_click_feedback(amount)
 	

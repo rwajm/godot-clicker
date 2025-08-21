@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://ggpc7opdy8l6"]
 
-[ext_resource type="Script" uid="uid://cwqg1mme0eiew" path="res://scenes/sidemenu_generator.gd" id="1_8nasw"]
+[ext_resource type="Script" uid="uid://cwqg1mme0eiew" path="res://scripts/ui/sidemenu_generator.gd" id="1_8nasw"]
 [ext_resource type="StyleBox" uid="uid://dd2260bp2eese" path="res://assets/style_box_flat_button.tres" id="1_evdmh"]
 [ext_resource type="PackedScene" uid="uid://df1oimf886234" path="res://scenes/upgrade_item.tscn" id="2_8nasw"]
 
